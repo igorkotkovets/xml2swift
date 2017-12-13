@@ -2,10 +2,8 @@ use_frameworks!
 
 target 'XML2Swift_Example' do
   pod 'XML2Swift', :path => '../'
-
-  target 'XML2Swift_Tests' do
-    inherit! :search_paths
-
-    
-  end
 end
+
+target 'XML2Swift_Tests' do
+    pod 'XML2Swift', :path => '../'
+  end

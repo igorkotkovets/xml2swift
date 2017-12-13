@@ -6,6 +6,11 @@
 //  Copyright (c) 2017 Igor Kotkovets. All rights reserved.
 //
 
+import XML2Swift
+
+
+
+
 import UIKit
 
 class ViewController: UIViewController {

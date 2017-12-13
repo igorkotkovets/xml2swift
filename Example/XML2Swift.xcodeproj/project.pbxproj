@@ -40,13 +40,13 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		618C29595AD81AE4979F53DC /* Pods-XML2Swift_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Tests/Pods-XML2Swift_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		63E4943631C779E891E9BA7E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		63E4943631C779E891E9BA7E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		71ADE660174B9F066B07D402 /* Pods_XML2Swift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XML2Swift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		772BBA081CD972A7C2E7D278 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		772BBA081CD972A7C2E7D278 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		825C16AA91112AE2C0B38EF9 /* Pods_XML2Swift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XML2Swift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F9B95B148E9327E15A6280 /* Pods-XML2Swift_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.release.xcconfig"; sourceTree = "<group>"; };
 		E7375CAF10BE55D978A04C17 /* Pods-XML2Swift_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		EB95D41F4CF7997809D3D4EB /* XML2Swift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = XML2Swift.podspec; path = ../XML2Swift.podspec; sourceTree = "<group>"; };
+		EB95D41F4CF7997809D3D4EB /* XML2Swift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = XML2Swift.podspec; path = ../XML2Swift.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,10 +215,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = L454S9SQH7;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = L454S9SQH7;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -285,9 +287,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Tests/Pods-XML2Swift_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/XML2Swift/XML2Swift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XML2Swift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -517,6 +522,7 @@
 			baseConfigurationReference = E7375CAF10BE55D978A04C17 /* Pods-XML2Swift_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L454S9SQH7;
 				INFOPLIST_FILE = XML2Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -532,6 +538,7 @@
 			baseConfigurationReference = C7F9B95B148E9327E15A6280 /* Pods-XML2Swift_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L454S9SQH7;
 				INFOPLIST_FILE = XML2Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -546,6 +553,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 30E9DAE1E9DCE8D6410CC061 /* Pods-XML2Swift_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = L454S9SQH7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -567,6 +575,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 618C29595AD81AE4979F53DC /* Pods-XML2Swift_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = L454S9SQH7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",

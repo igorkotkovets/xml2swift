@@ -30,13 +30,9 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'XML2Swift/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'XML2Swift' => ['XML2Swift/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.preserve_paths = 'XML2Swift/Classes/libxml2/*'
+  s.source_files = 'XML2Swift/Classes/**/*.swift'
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.2' }
+  s.library = "xml2"
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'SWIFT_INCLUDE_PATHS' => '$(PODS_TARGET_SRCROOT)/XML2Swift/Classes/libxml2' }
 end
