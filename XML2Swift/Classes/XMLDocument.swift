@@ -8,21 +8,22 @@
 import Foundation
 import libxml2
 
-public class XMLDocument: XMLNodeGeneric {
+public class XMLDocument: XMLNodeComponent {
     let cXmlNodePtr: xmlDocPtr
 
-    public convenience init?(withRead ioread: @escaping xmlInputReadCallback, close ioclose: @escaping xmlInputCloseCallback, context: UnsafeMutableRawPointer, options mask: Int) {
+    public convenience init?(withRead ioread: @escaping xmlInputReadCallback,
+                             close ioclose: @escaping xmlInputCloseCallback,
+                             context: UnsafeMutableRawPointer, options mask: Int) {
         xmlKeepBlanksDefault(0)
         guard let doc = xmlReadIO(ioread, ioclose, context, nil, nil, Int32(mask)) else {
             return nil
         }
 
-        self.init(withDocument: doc, owner: nil)
+        self.init(withDocument: doc)
     }
 
-    public init(withDocument primitive: xmlDocPtr, owner: XMLNodeGeneric?) {
+    public init(withDocument primitive: xmlDocPtr) {
         self.cXmlNodePtr = primitive
-        super.init(withOwner: owner)
     }
 
     public func rootElement() -> XMLElement? {
@@ -31,5 +32,25 @@ public class XMLDocument: XMLNodeGeneric {
         }
 
         return nil
+    }
+
+    public var name: String? {
+        guard let xmlName = cXmlNodePtr.pointee.name else {
+            return nil
+        }
+
+        let result = String(withXmlChar: xmlName)
+        return result
+    }
+
+    public var childCount: UInt {
+        var result: UInt = 0
+        var child = cXmlNodePtr.pointee.children
+        while child != nil {
+            result += 1
+            child = child?.pointee.next
+        }
+
+        return result
     }
 }

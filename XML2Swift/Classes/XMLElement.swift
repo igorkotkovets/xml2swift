@@ -17,8 +17,8 @@ public class XMLElement: XMLNode {
         self.init(withElement: node, owner: nil)
     }
 
-    public init?(withElement primitive: xmlNodePtr, owner: XMLNodeGeneric?) {
-        super.init(withPrimitive:primitive, owner: owner)
+    public init?(withElement primitive: xmlNodePtr, owner: XMLNodeComponent?) {
+        super.init(withPrimitive: primitive, owner: owner)
     }
 
     public convenience init?(withName name: String, uri: String) {
@@ -29,7 +29,7 @@ public class XMLElement: XMLNode {
         self.init(withElement: node, owner: nil)
     }
 
-    static func node(withElement primitive: xmlNodePtr, owner: XMLNodeGeneric?) -> XMLElement? {
+    static func node(withElement primitive: xmlNodePtr, owner: XMLNodeComponent?) -> XMLElement? {
         return XMLElement(withElement: primitive, owner: owner)
     }
 }

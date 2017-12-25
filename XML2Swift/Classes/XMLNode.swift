@@ -8,11 +8,6 @@
 import Foundation
 import libxml2
 
-struct _xmlKind {
-    let ignore: UnsafeRawPointer
-    let type: xmlElementType
-}
-
 enum XMLNodeKind {
     case invalid
     case document
@@ -62,43 +57,77 @@ extension xmlElementType {
 }
 
 // TODO: Remove extension, add business logic to class
-extension xmlNode {
-    func isXMLNodePtr() -> Bool {
-        switch self.type {
+extension XMLNodeComponent {
+    static func isXMLNode(_ ptr: xmlNodePtr) -> Bool {
+        switch ptr.pointee.type {
         case XML_ELEMENT_NODE, XML_PI_NODE, XML_COMMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE:
             return true
         default:
             return false
         }
     }
+
+    static func isXMLDtd(ptr: xmlNodePtr) -> Bool {
+        return ptr.pointee.type == XML_DTD_NODE
+    }
 }
 
-public class XMLNode: XMLNodeGeneric {
-    var name: String?
+public class XMLNode: XMLNodeComponent {
     var value: String?
     var index: UInt?
     var level: UInt?
     var rootDocument: XMLDocument?
     var parent: XMLNode?
-    var childCount: UInt?
     var children: [XMLNode]?
-    
+    let owner: XMLNodeComponent?
     let cXmlNodePtr: xmlNodePtr
 
-    public init?(withPrimitive primitive: xmlNodePtr, owner: XMLNodeGeneric?) {
+    public init?(withPrimitive primitive: xmlNodePtr, owner: XMLNodeComponent?) {
         self.cXmlNodePtr = primitive
-        super.init(withOwner: owner)
+        self.owner = owner
     }
 
     var kind: XMLNodeKind {
         return cXmlNodePtr.pointee.type.toNodeKind()
     }
 
+    public var name: String? {
+        guard let xmlName = cXmlNodePtr.pointee.name else {
+            return nil
+        }
+
+        var result = String(withXmlChar: xmlName)
+        if XMLNode.isXMLNode(cXmlNodePtr),
+        result.contains(":") == true,
+        cXmlNodePtr.pointee.ns != nil,
+        let prefixXmlChar = cXmlNodePtr.pointee.ns.pointee.prefix {
+            let prefix = String(withXmlChar: prefixXmlChar)
+            result = prefix + ":" + result
+        }
+
+        return result
+    }
+
+    public var childCount: UInt {
+        guard XMLNode.isXMLNode(cXmlNodePtr) || XMLNode.isXMLDtd(ptr: cXmlNodePtr) else {
+            return 0
+        }
+
+        var result: UInt = 0
+        var child = cXmlNodePtr.pointee.children
+        while child != nil {
+            result += 1
+            child = child?.pointee.next
+        }
+
+        return result
+    }
+
     var uri: String? {
         set {
-            if cXmlNodePtr.pointee.isXMLNodePtr() {
-                if (cXmlNodePtr.pointee.ns != nil) {
-                    type(of:self).remove(namespace: cXmlNodePtr.pointee.ns, from: cXmlNodePtr)
+            if XMLNode.isXMLNode(cXmlNodePtr) {
+                if cXmlNodePtr.pointee.ns != nil {
+                    type(of: self).remove(namespace: cXmlNodePtr.pointee.ns, from: cXmlNodePtr)
                 }
             }
 
@@ -112,7 +141,7 @@ public class XMLNode: XMLNodeGeneric {
             cXmlNodePtr.pointee.ns = namespace
         }
         get {
-            if cXmlNodePtr.pointee.isXMLNodePtr() {
+            if XMLNode.isXMLNode(cXmlNodePtr) {
                 if let namespace = cXmlNodePtr.pointee.ns {
                     return String(withXmlChar: namespace.pointee.href)
                 }
@@ -129,8 +158,6 @@ public class XMLNode: XMLNodeGeneric {
     static func element(withName aname: String, uri: String) -> XMLElement? {
         return XMLElement(withName: aname)
     }
-
-    
 
     static func remove(namespace: xmlNsPtr, from node: xmlNodePtr) {
         detach(namespace: namespace, from: node)
