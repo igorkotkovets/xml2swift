@@ -1,9 +1,13 @@
 use_frameworks!
+swift_version = '3.2'
+platform :ios, '9.0'
 
 target 'XML2Swift_Example' do
   pod 'XML2Swift', :path => '../'
+  pod 'CleanTests', :git => 'https://github.com/igorkotkovets/pod.swift.clean-tests'
 end
 
 target 'XML2Swift_Tests' do
     pod 'XML2Swift', :path => '../'
-  end
+    pod 'CleanTests', :git => 'https://github.com/igorkotkovets/pod.swift.clean-tests'
+end

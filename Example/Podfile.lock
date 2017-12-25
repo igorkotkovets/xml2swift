@@ -1,16 +1,26 @@
 PODS:
+  - CleanTests (0.1.0)
   - XML2Swift (0.1.0)
 
 DEPENDENCIES:
+  - CleanTests (from `https://github.com/igorkotkovets/pod.swift.clean-tests`)
   - XML2Swift (from `../`)
 
 EXTERNAL SOURCES:
+  CleanTests:
+    :git: https://github.com/igorkotkovets/pod.swift.clean-tests
   XML2Swift:
     :path: ../
 
+CHECKOUT OPTIONS:
+  CleanTests:
+    :commit: 1551d200108c985e2ba840626b8e42502033fafd
+    :git: https://github.com/igorkotkovets/pod.swift.clean-tests
+
 SPEC CHECKSUMS:
+  CleanTests: e2e362a43f787a346c023b93a3b2471f87481aab
   XML2Swift: 5ad7046dd5293e570a77518e07c171503ec17b65
 
-PODFILE CHECKSUM: 3b2a51630ca5aefb36bcbb38afb2b91efff75b93
+PODFILE CHECKSUM: 88bb43c779e72eb63c291e4015953853ed88d96b
 
 COCOAPODS: 1.3.1

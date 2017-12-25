@@ -15,6 +15,9 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		6589BA30392A91937A06CA47 /* Pods_XML2Swift_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71ADE660174B9F066B07D402 /* Pods_XML2Swift_Example.framework */; };
 		70D5D26D948ED2498D767A67 /* Pods_XML2Swift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 825C16AA91112AE2C0B38EF9 /* Pods_XML2Swift_Tests.framework */; };
+		D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */; };
+		D8BAD22F1FF0D6820033E26A /* template.xml in Resources */ = {isa = PBXBuildFile; fileRef = D8BAD22E1FF0D6820033E26A /* template.xml */; };
+		D8BAD2311FF0D68E0033E26A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD2301FF0D68E0033E26A /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,9 @@
 		772BBA081CD972A7C2E7D278 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		825C16AA91112AE2C0B38EF9 /* Pods_XML2Swift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XML2Swift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F9B95B148E9327E15A6280 /* Pods-XML2Swift_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.release.xcconfig"; sourceTree = "<group>"; };
+		D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDocumentTests.swift; sourceTree = "<group>"; };
+		D8BAD22E1FF0D6820033E26A /* template.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = template.xml; sourceTree = "<group>"; };
+		D8BAD2301FF0D68E0033E26A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E7375CAF10BE55D978A04C17 /* Pods-XML2Swift_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		EB95D41F4CF7997809D3D4EB /* XML2Swift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = XML2Swift.podspec; path = ../XML2Swift.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +131,9 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				D8BAD2301FF0D68E0033E26A /* Constants.swift */,
+				D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */,
+				D8BAD22E1FF0D6820033E26A /* template.xml */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -172,6 +181,7 @@
 				607FACCE1AFB9204008FA782 /* Resources */,
 				BE54E604A1D7D03BEACF103F /* [CP] Embed Pods Frameworks */,
 				97D1C4AB922F4A7B810B277D /* [CP] Copy Pods Resources */,
+				D8A832D11FEF8670005DF74E /* Highlight User Warnings */,
 			);
 			buildRules = (
 			);
@@ -260,6 +270,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8BAD22F1FF0D6820033E26A /* template.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,10 +299,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Tests/Pods-XML2Swift_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CleanTests/CleanTests.framework",
 				"${BUILT_PRODUCTS_DIR}/XML2Swift/XML2Swift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CleanTests.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XML2Swift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,10 +352,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CleanTests/CleanTests.framework",
 				"${BUILT_PRODUCTS_DIR}/XML2Swift/XML2Swift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CleanTests.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XML2Swift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +383,20 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D8A832D11FEF8670005DF74E /* Highlight User Warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Highlight User Warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "KEYWORDS=\"TODO|FIXME|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | \\\nxargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | \\\nperl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -384,7 +413,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				D8BAD2311FF0D68E0033E26A /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
