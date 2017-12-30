@@ -54,7 +54,7 @@ extension XMLNode {
         }
     }
 
-    static func isXMLDtd(node: xmlNode) -> Bool {
+    static func isXMLDtd(_ node: xmlNode) -> Bool {
         return node.type == XML_DTD_NODE
     }
 
@@ -108,12 +108,9 @@ public class XMLNode {
     }
     var index: UInt?
     var level: UInt?
-
     var parent: XMLNode?
-
     let owner: XMLNode?
     let xmlPtr: UnsafeMutableRawPointer
-    
 
     init(withPrimitive primitive: xmlDocPtr) {
         xmlPtr = UnsafeMutableRawPointer(primitive)
@@ -182,7 +179,7 @@ public class XMLNode {
 
     public var childCount: Int {
         let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
-        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node: node.pointee) else {
+        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node.pointee) else {
             return 0
         }
 
@@ -198,7 +195,7 @@ public class XMLNode {
 
     public func child(at index: Int) -> XMLNode? {
         let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
-        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node: node.pointee) else {
+        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node.pointee) else {
             return nil
         }
 
@@ -231,7 +228,7 @@ public class XMLNode {
 
     var uri: String? {
         set {
-            var node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+            let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
             if XMLNode.isXMLNode(node.pointee) {
                 if node.pointee.ns != nil {
                     type(of: self).remove(namespace: node.pointee.ns, from: node)

@@ -29,7 +29,7 @@ public class XMLDocument: XMLNode {
     }
 
     public func rootElement() -> XMLElement? {
-        var node = UnsafeMutablePointer<xmlDoc>(OpaquePointer(xmlPtr))
+        let node = UnsafeMutablePointer<xmlDoc>(OpaquePointer(xmlPtr))
         if let rootNode = xmlDocGetRootElement(node) {
             return XMLElement.node(withElement: rootNode, owner: self)
         }
