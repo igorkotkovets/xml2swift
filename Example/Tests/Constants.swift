@@ -13,4 +13,9 @@ struct Constants {
         let path = Bundle(for: XMLDocumentTests.self).path(forResource: "template", ofType: "xml")
         return path!
     }()
+
+    static let kdbV4FilePath: String = {
+        let path = Bundle(for: XMLDocumentTests.self).path(forResource: "kdbv4payload", ofType: "xml")
+        return path!
+    }()
 }

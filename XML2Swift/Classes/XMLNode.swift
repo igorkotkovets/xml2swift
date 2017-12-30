@@ -8,23 +8,8 @@
 import Foundation
 import libxml2
 
-enum XMLNodeKind {
-    case invalid
-    case document
-    case element
-    case attribute
-    case namespace
-    case processingInstruction
-    case comment
-    case dtd
-    case entityDeclaration
-    case attributeDeclaration
-    case elementDeclaration
-    case notationDeclaration
-}
-
 extension xmlElementType {
-    func toNodeKind() -> XMLNodeKind {
+    func toNodeKind() -> XMLNode.Kind {
         switch self {
         case XML_DOCUMENT_NODE:
             return .document
@@ -39,9 +24,11 @@ extension xmlElementType {
         case XML_COMMENT_NODE:
             return .comment
         case XML_TEXT_NODE:
+            return .text
+        case XML_COMMENT_NODE:
             return .comment
         case XML_DTD_NODE:
-            return .dtd
+            return .DTDKind
         case XML_ENTITY_DECL:
             return .entityDeclaration
         case XML_ATTRIBUTE_DECL:
@@ -57,9 +44,9 @@ extension xmlElementType {
 }
 
 // TODO: Remove extension, add business logic to class
-extension XMLNodeComponent {
-    static func isXMLNode(_ ptr: xmlNodePtr) -> Bool {
-        switch ptr.pointee.type {
+extension XMLNode {
+    static func isXMLNode(_ node: xmlNode) -> Bool {
+        switch node.type {
         case XML_ELEMENT_NODE, XML_PI_NODE, XML_COMMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE:
             return true
         default:
@@ -67,54 +54,140 @@ extension XMLNodeComponent {
         }
     }
 
-    static func isXMLDtd(ptr: xmlNodePtr) -> Bool {
-        return ptr.pointee.type == XML_DTD_NODE
+    static func isXMLDtd(node: xmlNode) -> Bool {
+        return node.type == XML_DTD_NODE
+    }
+
+    static func split(name: String?) -> (prefix: String?, localName: String?) {
+        guard let `name` = name else {
+            return ("", nil)
+        }
+
+        guard let range = name.rangeOfCharacter(from: [":"]) else {
+            return ("", name)
+        }
+
+        return (name.substring(to: range.lowerBound),
+                name.substring(from: range.upperBound))
     }
 }
 
-public class XMLNode: XMLNodeComponent {
-    var value: String?
+public class XMLNode {
+    public enum Kind {
+        case invalid
+        case document
+        case element
+        case attribute
+        case namespace
+        case processingInstruction
+        case comment
+        case text
+        case DTDKind
+        case entityDeclaration
+        case attributeDeclaration
+        case elementDeclaration
+        case notationDeclaration
+    }
+
+    public var stringValue: String? {
+        set {
+
+        }
+
+        get {
+            let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+            guard XMLNode.isXMLNode(node.pointee) == true,
+            let content = xmlNodeGetContent(node) else {
+                return nil
+            }
+
+            let result = String(cString: content)
+            xmlFree(content)
+            return result
+        }
+    }
     var index: UInt?
     var level: UInt?
-    var rootDocument: XMLDocument?
-    var parent: XMLNode?
-    var children: [XMLNode]?
-    let owner: XMLNodeComponent?
-    let cXmlNodePtr: xmlNodePtr
 
-    public init?(withPrimitive primitive: xmlNodePtr, owner: XMLNodeComponent?) {
-        self.cXmlNodePtr = primitive
+    var parent: XMLNode?
+
+    let owner: XMLNode?
+    let xmlPtr: UnsafeMutableRawPointer
+    
+
+    init(withPrimitive primitive: xmlDocPtr) {
+        xmlPtr = UnsafeMutableRawPointer(primitive)
+        self.owner = nil
+    }
+
+    init(withPrimitive primitive: xmlNodePtr, owner: XMLNode?) {
+        xmlPtr = UnsafeMutableRawPointer(primitive)
         self.owner = owner
     }
 
-    var kind: XMLNodeKind {
-        return cXmlNodePtr.pointee.type.toNodeKind()
+    init(withPrimitive primitive: xmlAttrPtr, owner: XMLNode?) {
+        xmlPtr = UnsafeMutableRawPointer(primitive)
+        self.owner = owner
     }
 
-    public var name: String? {
-        guard let xmlName = cXmlNodePtr.pointee.name else {
+    init(withPrimitive primitive: xmlNsPtr, owner: XMLNode?) {
+        xmlPtr = UnsafeMutableRawPointer(primitive)
+        self.owner = owner
+    }
+
+    var rootDocument: XMLDocument? {
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+        guard let docPtr = node.pointee.doc else {
             return nil
         }
 
-        var result = String(withXmlChar: xmlName)
-        if XMLNode.isXMLNode(cXmlNodePtr),
+        return XMLDocument.node(withDocument: docPtr)
+    }
+
+    public var kind: Kind {
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+        return node.pointee.type.toNodeKind()
+    }
+
+    public var children: [XMLNode]? {
+        var result = [XMLNode]()
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+
+        var child = node.pointee.children
+        while child != nil {
+            result.append(XMLNode.node(withUnknown: child!, owner: self))
+            child = child?.pointee.next
+        }
+
+        return result
+    }
+
+    public var name: String? {
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+        guard let xmlName = node.pointee.name else {
+            return nil
+        }
+
+        var result = String(cString: xmlName)
+        if XMLNode.isXMLNode(node.pointee),
         result.contains(":") == true,
-        cXmlNodePtr.pointee.ns != nil,
-        let prefixXmlChar = cXmlNodePtr.pointee.ns.pointee.prefix {
-            let prefix = String(withXmlChar: prefixXmlChar)
+        node.pointee.ns != nil,
+        let prefixXmlChar = node.pointee.ns.pointee.prefix {
+            let prefix = String(cString: prefixXmlChar)
             result = prefix + ":" + result
         }
 
         return result
     }
 
-    public var childCount: UInt {
-        guard XMLNode.isXMLNode(cXmlNodePtr) || XMLNode.isXMLDtd(ptr: cXmlNodePtr) else {
+    public var childCount: Int {
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node: node.pointee) else {
             return 0
         }
 
-        var result: UInt = 0
-        var child = cXmlNodePtr.pointee.children
+        var result = 0
+        var child = node.pointee.children
         while child != nil {
             result += 1
             child = child?.pointee.next
@@ -123,11 +196,45 @@ public class XMLNode: XMLNodeComponent {
         return result
     }
 
+    public func child(at index: Int) -> XMLNode? {
+        let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+        guard XMLNode.isXMLNode(node.pointee) || XMLNode.isXMLDtd(node: node.pointee) else {
+            return nil
+        }
+
+        var i = 0
+        var child = node.pointee.children
+        while child != nil {
+            if i == index {
+                return XMLNode.node(withUnknown: child!, owner: self)
+            }
+
+            i += 1
+            child = child?.pointee.next
+        }
+
+        return nil
+    }
+
+    static func node(withUnknown primitive: xmlNodePtr, owner: XMLNode) -> XMLNode {
+        if primitive.pointee.type == XML_DOCUMENT_NODE {
+            return XMLDocument.node(withDocument: primitive.withMemoryRebound(to: xmlDoc.self,
+                                                                              capacity: 1) { bytes -> xmlDocPtr in
+                return UnsafeMutablePointer(bytes)
+            })
+        } else if primitive.pointee.type == XML_ELEMENT_NODE {
+            return XMLElement.node(withElement: primitive, owner: owner)
+        } else {
+            return XMLNode(withPrimitive: primitive, owner: owner)
+        }
+    }
+
     var uri: String? {
         set {
-            if XMLNode.isXMLNode(cXmlNodePtr) {
-                if cXmlNodePtr.pointee.ns != nil {
-                    type(of: self).remove(namespace: cXmlNodePtr.pointee.ns, from: cXmlNodePtr)
+            var node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+            if XMLNode.isXMLNode(node.pointee) {
+                if node.pointee.ns != nil {
+                    type(of: self).remove(namespace: node.pointee.ns, from: node)
                 }
             }
 
@@ -136,14 +243,15 @@ public class XMLNode: XMLNodeComponent {
             }
 
             let namespace: xmlNsPtr = xmlNewNs(nil, newValue.xmlChar(), nil)
-            namespace.pointee.next = cXmlNodePtr.pointee.nsDef
-            cXmlNodePtr.pointee.nsDef = namespace
-            cXmlNodePtr.pointee.ns = namespace
+            namespace.pointee.next = node.pointee.nsDef
+            node.pointee.nsDef = namespace
+            node.pointee.ns = namespace
         }
         get {
-            if XMLNode.isXMLNode(cXmlNodePtr) {
-                if let namespace = cXmlNodePtr.pointee.ns {
-                    return String(withXmlChar: namespace.pointee.href)
+            let node = UnsafeMutablePointer<xmlNode>(OpaquePointer(xmlPtr))
+            if XMLNode.isXMLNode(node.pointee) {
+                if let namespace = node.pointee.ns {
+                    return String(cString: namespace.pointee.href)
                 }
             }
 

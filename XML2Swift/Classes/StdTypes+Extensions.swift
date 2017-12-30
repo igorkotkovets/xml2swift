@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import libxml2
 
 public extension FixedWidthInteger {
     func hexString(withAdding prefix: String? = "0x") -> String {
@@ -136,22 +135,13 @@ public extension UnsafePointer where Pointee: FixedWidthInteger {
 }
 
 extension String {
-    init(withXmlChar charBuffer: UnsafePointer<xmlChar>) {
-        self.init(cString: charBuffer)
-    }
+    func xmlChar() -> [UInt8]? {
+        guard let cStr = cString(using: .utf8) else {
+            return nil
+        }
 
-    init(withXmlChar charBuffer: UnsafeMutablePointer<xmlChar>) {
-        self.init(cString: charBuffer)
-    }
-
-    init(withXmlChar charBuffer: UnsafeMutablePointer<Int8>) {
-        self.init(cString: charBuffer)
-    }
-
-    func xmlChar() -> [xmlChar] {
-        let length = self.utf8.count
-        var buffer: [xmlChar] = Array(repeating: 0, count: length)
-        
-        return buffer
+        return cStr.withUnsafeBytes {
+            return Array($0)
+        }
     }
 }

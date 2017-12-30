@@ -8,49 +8,58 @@
 import Foundation
 import libxml2
 
-public class XMLDocument: XMLNodeComponent {
-    let cXmlNodePtr: xmlDocPtr
-
-    public convenience init?(withRead ioread: @escaping xmlInputReadCallback,
-                             close ioclose: @escaping xmlInputCloseCallback,
-                             context: UnsafeMutableRawPointer, options mask: Int) {
+public class XMLDocument: XMLNode {
+    public init?(withRead ioread: @escaping xmlInputReadCallback,
+                 close ioclose: @escaping xmlInputCloseCallback,
+                 context: UnsafeMutableRawPointer, options mask: Int) {
         xmlKeepBlanksDefault(0)
         guard let doc = xmlReadIO(ioread, ioclose, context, nil, nil, Int32(mask)) else {
             return nil
         }
 
-        self.init(withDocument: doc)
+        super.init(withPrimitive: doc)
     }
 
     public init(withDocument primitive: xmlDocPtr) {
-        self.cXmlNodePtr = primitive
+        super.init(withPrimitive: primitive)
+    }
+
+    static func node(withDocument primitive: xmlDocPtr) -> XMLDocument {
+        return XMLDocument(withDocument: primitive)
     }
 
     public func rootElement() -> XMLElement? {
-        if let rootNode = xmlDocGetRootElement(cXmlNodePtr) {
+        var node = UnsafeMutablePointer<xmlDoc>(OpaquePointer(xmlPtr))
+        if let rootNode = xmlDocGetRootElement(node) {
             return XMLElement.node(withElement: rootNode, owner: self)
         }
 
         return nil
     }
 
-    public var name: String? {
-        guard let xmlName = cXmlNodePtr.pointee.name else {
+    override public var name: String? {
+        let node = UnsafeMutablePointer<xmlDoc>(OpaquePointer(xmlPtr))
+        guard let xmlName = node.pointee.name else {
             return nil
         }
 
-        let result = String(withXmlChar: xmlName)
+        let result = String(cString: xmlName)
         return result
     }
 
-    public var childCount: UInt {
-        var result: UInt = 0
-        var child = cXmlNodePtr.pointee.children
+    override public var childCount: Int {
+        let node = UnsafeMutablePointer<xmlDoc>(OpaquePointer(xmlPtr))
+        var result = 0
+        var child = node.pointee.children
         while child != nil {
             result += 1
             child = child?.pointee.next
         }
 
         return result
+    }
+
+    override public func child(at index: Int) -> XMLNode? {
+        return nil
     }
 }
