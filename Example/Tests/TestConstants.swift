@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Constants {
+struct TestConstants {
     static let xmlFilePath: String = {
         let path = Bundle(for: XMLDocumentTests.self).path(forResource: "template", ofType: "xml")
         return path!

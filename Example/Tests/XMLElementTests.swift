@@ -17,7 +17,7 @@ class XMLElementTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let fileHandle = FileHandle(forReadingAtPath: Constants.kdbV4FilePath)!
+        let fileHandle = FileHandle(forReadingAtPath: TestConstants.kdbV4FilePath)!
         let fileStream = FileInputStream(withFileHandle: fileHandle)
         let inputStream: XML2Swift.InputStream = fileStream
         let stream = inputStream as AnyObject

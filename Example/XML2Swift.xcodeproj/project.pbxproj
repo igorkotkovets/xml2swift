@@ -17,7 +17,7 @@
 		D82BD7131FF189D40068C9EF /* kdbv4payload.xml in Resources */ = {isa = PBXBuildFile; fileRef = D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */; };
 		D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */; };
 		D8BAD22F1FF0D6820033E26A /* template.xml in Resources */ = {isa = PBXBuildFile; fileRef = D8BAD22E1FF0D6820033E26A /* template.xml */; };
-		D8BAD2311FF0D68E0033E26A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD2301FF0D68E0033E26A /* Constants.swift */; };
+		D8BAD2311FF0D68E0033E26A /* TestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD2301FF0D68E0033E26A /* TestConstants.swift */; };
 		D8CA85CA1FF3B978003B82A7 /* XMLElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CA85C91FF3B978003B82A7 /* XMLElementTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +51,7 @@
 		D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = kdbv4payload.xml; sourceTree = "<group>"; };
 		D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDocumentTests.swift; sourceTree = "<group>"; };
 		D8BAD22E1FF0D6820033E26A /* template.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = template.xml; sourceTree = "<group>"; };
-		D8BAD2301FF0D68E0033E26A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D8BAD2301FF0D68E0033E26A /* TestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConstants.swift; sourceTree = "<group>"; };
 		D8CA85C91FF3B978003B82A7 /* XMLElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLElementTests.swift; sourceTree = "<group>"; };
 		E7375CAF10BE55D978A04C17 /* Pods-XML2Swift_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		EB95D41F4CF7997809D3D4EB /* XML2Swift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = XML2Swift.podspec; path = ../XML2Swift.podspec; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				D8BAD2301FF0D68E0033E26A /* Constants.swift */,
+				D8BAD2301FF0D68E0033E26A /* TestConstants.swift */,
 				D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */,
 				D8CA85C91FF3B978003B82A7 /* XMLElementTests.swift */,
 				D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */,
@@ -236,7 +236,6 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = L454S9SQH7;
 						LastSwiftMigration = 0900;
-						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
 			};
@@ -434,7 +433,7 @@
 			files = (
 				D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */,
 				D8CA85CA1FF3B978003B82A7 /* XMLElementTests.swift in Sources */,
-				D8BAD2311FF0D68E0033E26A /* Constants.swift in Sources */,
+				D8BAD2311FF0D68E0033E26A /* TestConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
