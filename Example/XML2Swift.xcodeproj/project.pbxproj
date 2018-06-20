@@ -15,6 +15,7 @@
 		6589BA30392A91937A06CA47 /* Pods_XML2Swift_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71ADE660174B9F066B07D402 /* Pods_XML2Swift_Example.framework */; };
 		70D5D26D948ED2498D767A67 /* Pods_XML2Swift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 825C16AA91112AE2C0B38EF9 /* Pods_XML2Swift_Tests.framework */; };
 		D82BD7131FF189D40068C9EF /* kdbv4payload.xml in Resources */ = {isa = PBXBuildFile; fileRef = D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */; };
+		D89F0C9120DA98C60073868E /* XMLNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89F0C9020DA98C60073868E /* XMLNodeTests.swift */; };
 		D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */; };
 		D8BAD22F1FF0D6820033E26A /* template.xml in Resources */ = {isa = PBXBuildFile; fileRef = D8BAD22E1FF0D6820033E26A /* template.xml */; };
 		D8BAD2311FF0D68E0033E26A /* TestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAD2301FF0D68E0033E26A /* TestConstants.swift */; };
@@ -49,6 +50,7 @@
 		825C16AA91112AE2C0B38EF9 /* Pods_XML2Swift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XML2Swift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F9B95B148E9327E15A6280 /* Pods-XML2Swift_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XML2Swift_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = kdbv4payload.xml; sourceTree = "<group>"; };
+		D89F0C9020DA98C60073868E /* XMLNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLNodeTests.swift; sourceTree = "<group>"; };
 		D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLDocumentTests.swift; sourceTree = "<group>"; };
 		D8BAD22E1FF0D6820033E26A /* template.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = template.xml; sourceTree = "<group>"; };
 		D8BAD2301FF0D68E0033E26A /* TestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConstants.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				D8BAD2301FF0D68E0033E26A /* TestConstants.swift */,
 				D8BAD22C1FF0D4670033E26A /* XMLDocumentTests.swift */,
 				D8CA85C91FF3B978003B82A7 /* XMLElementTests.swift */,
+				D89F0C9020DA98C60073868E /* XMLNodeTests.swift */,
 				D82BD7111FF189CE0068C9EF /* kdbv4payload.xml */,
 				D8BAD22E1FF0D6820033E26A /* template.xml */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -183,7 +186,6 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				BE54E604A1D7D03BEACF103F /* [CP] Embed Pods Frameworks */,
-				97D1C4AB922F4A7B810B277D /* [CP] Copy Pods Resources */,
 				D8A832D11FEF8670005DF74E /* Highlight User Warnings */,
 				D8BAD2321FF103480033E26A /* SwiftLint analysis */,
 			);
@@ -205,7 +207,6 @@
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
 				20E219A78B44F6F832661680 /* [CP] Embed Pods Frameworks */,
-				0B881F9072D2439872A4E6C0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -281,21 +282,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B881F9072D2439872A4E6C0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Tests/Pods-XML2Swift_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		20E219A78B44F6F832661680 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -314,21 +300,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Tests/Pods-XML2Swift_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		97D1C4AB922F4A7B810B277D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-XML2Swift_Example/Pods-XML2Swift_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B836FC2768A6436ED900BA49 /* [CP] Check Pods Manifest.lock */ = {
@@ -413,7 +384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "#if which swiftlint >/dev/null; then\n#\"${PODS_ROOT}/SwiftLint/swiftlint\"\n#else\n#echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -434,6 +405,7 @@
 				D8BAD22D1FF0D4670033E26A /* XMLDocumentTests.swift in Sources */,
 				D8CA85CA1FF3B978003B82A7 /* XMLElementTests.swift in Sources */,
 				D8BAD2311FF0D68E0033E26A /* TestConstants.swift in Sources */,
+				D89F0C9120DA98C60073868E /* XMLNodeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -73,6 +73,7 @@ extension XMLNode {
 }
 
 public class XMLNode {
+    
     public enum Kind {
         case invalid
         case document
@@ -157,6 +158,10 @@ public class XMLNode {
         }
 
         return result
+    }
+
+    public var next: XMLNode? {
+        return nil
     }
 
     public var name: String? {

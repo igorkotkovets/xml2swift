@@ -1,6 +1,6 @@
 PODS:
   - CleanTests (0.1.0)
-  - SwiftLint (0.24.0)
+  - SwiftLint (0.25.1)
   - XML2Swift (0.1.0)
 
 DEPENDENCIES:
@@ -8,11 +8,15 @@ DEPENDENCIES:
   - SwiftLint
   - XML2Swift (from `../`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SwiftLint
+
 EXTERNAL SOURCES:
   CleanTests:
     :git: https://github.com/igorkotkovets/pod.swift.clean-tests
   XML2Swift:
-    :path: ../
+    :path: "../"
 
 CHECKOUT OPTIONS:
   CleanTests:
@@ -21,9 +25,9 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   CleanTests: e2e362a43f787a346c023b93a3b2471f87481aab
-  SwiftLint: a014c92b4664e8b13f380f8640a51bb1733778ba
-  XML2Swift: 16b3598c519435b7a419c622c180b7a374754af8
+  SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
+  XML2Swift: 35137c442d599e593effaec80d2fe68c1a7c2075
 
 PODFILE CHECKSUM: d53238cf48292385c099f7bf135c582fa21b1514
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.3
