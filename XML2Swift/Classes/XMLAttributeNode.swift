@@ -18,18 +18,4 @@ class XMLAttributeNode: XMLNode {
     init(withAttr primitive: xmlAttrPtr, owner: XMLNode?) {
         super.init(withPrimitive: primitive, owner: owner)
     }
-
-    override var stringValue: String? {
-        set {
-            // TODO: IMPLEMENT
-        }
-        get {
-            let attr = UnsafeMutablePointer<xmlAttr>(OpaquePointer(xmlPtr))
-            guard let children = attr.pointee.children else {
-                return nil
-            }
-
-            return String(cString: children.pointee.content)
-        }
-    }
 }

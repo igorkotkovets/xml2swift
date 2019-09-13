@@ -18,12 +18,15 @@ class XMLInvalidNode: XMLNode {
             // TODO: IMPLEMENT
         }
         get {
-            let attr = UnsafeMutablePointer<xmlAttr>(OpaquePointer(xmlPtr))
-            guard let children = attr.pointee.children else {
-                return nil
-            }
-
-            return String(cString: children.pointee.content)
+            return nil
         }
+    }
+
+    override var nextSibling: XMLNode? {
+        return nil
+    }
+
+    override var children: [XMLNode]? {
+        return []
     }
 }

@@ -18,7 +18,7 @@ class XMLNodeTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let fileHandle = FileHandle(forReadingAtPath: TestConstants.kdbV4FilePath)!
+        let fileHandle = FileHandle(forReadingAtPath: TestConstants.xmlNodeTestsFilePath)!
         let fileStream = FileInputStream(withFileHandle: fileHandle)
         let inputStream: XML2Swift.InputStream = fileStream
         let stream = inputStream as AnyObject
@@ -39,8 +39,18 @@ class XMLNodeTests: XCTestCase {
     }
 
     func testThatReturnsNextNode() {
-        let node = rootElement?.next
-        XCTAssertNotNil(node)
+        let metaNode = rootElement?.next
+        XCTAssertNotNil(metaNode)
+        XCTAssertEqual(metaNode!.name!, "Meta")
+
+        let generatorNode = metaNode?.next
+        XCTAssertNotNil(generatorNode)
+        XCTAssertEqual(generatorNode!.name!, "Generator")
+
+        let headerHashNode = generatorNode?.next
+        XCTAssertNotNil(headerHashNode)
+        XCTAssertEqual(headerHashNode!.name, nil)
+
     }
 
 }

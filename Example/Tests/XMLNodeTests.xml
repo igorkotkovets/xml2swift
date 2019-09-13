@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KeePassFile>
+    <Meta>
+        <Generator>MiniKeePass</Generator>
+        <HeaderHash>kQEWtadyseNE1NTDN/6FjXYs8qxqwy9lwmrHMmzrSvM=</HeaderHash>
+    </Meta>
+    <Root>
+        <Group>
+            <UUID>TvV+7TUeSCubDEEOidwvag==</UUID>
+            <Name>General</Name>
+            <Notes />
+            <IconID>48</IconID>
+            <Times>
+                <LastModificationTime>2017-11-23T18:55:45Z</LastModificationTime>
+                <CreationTime>2017-11-23T18:55:45Z</CreationTime>
+                <LastAccessTime>2017-11-23T18:55:45Z</LastAccessTime>
+                <ExpiryTime>2017-11-23T18:55:45Z</ExpiryTime>
+                <Expires>False</Expires>
+                <UsageCount>0</UsageCount>
+                <LocationChanged>2017-11-23T18:55:45Z</LocationChanged>
+            </Times>
+        </Group>
+        <DeletedObjects />
+    </Root>
+</KeePassFile>

@@ -8,9 +8,6 @@
 
 import XML2Swift
 
-
-
-
 import UIKit
 
 class ViewController: UIViewController {

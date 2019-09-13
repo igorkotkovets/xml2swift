@@ -31,8 +31,8 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '8.0'
 
   s.preserve_paths = 'XML2Swift/libxml2/*'
-  s.source_files = 'XML2Swift/Classes/**/*.swift'
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.2' }
+  s.source_files = 'XML2Swift/Classes/**/*.{swift,h,c}'
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }
   s.library = "xml2"
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'SWIFT_INCLUDE_PATHS' => '$(PODS_TARGET_SRCROOT)/XML2Swift/libxml2' }
 end

@@ -4,7 +4,6 @@ platform :ios, '9.0'
 
 target 'XML2Swift_Example' do
   pod 'XML2Swift', :path => '../'
-  pod 'CleanTests', :git => 'https://github.com/igorkotkovets/pod.swift.clean-tests'
   pod 'SwiftLint'
 end
 

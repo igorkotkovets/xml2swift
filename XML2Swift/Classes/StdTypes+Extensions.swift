@@ -37,7 +37,7 @@ public extension Data {
         return result
     }
 
-    public init?(hex string: String) {
+    init?(hex string: String) {
         self.init(capacity: string.utf16.count/2)
         var even = true
         var byte: UInt8 = 0
@@ -77,7 +77,7 @@ public extension Data {
 }
 
 public extension UnsafeMutablePointer where Pointee: FixedWidthInteger {
-    public func isEqual(to buffer: UnsafeMutablePointer<Pointee>, ofLength length: Int) -> Bool {
+    func isEqual(to buffer: UnsafeMutablePointer<Pointee>, ofLength length: Int) -> Bool {
         for i in 0..<length where self[i] != buffer[i] {
             return false
         }
@@ -85,7 +85,7 @@ public extension UnsafeMutablePointer where Pointee: FixedWidthInteger {
         return true
     }
 
-    public func isEqual(to buffer: UnsafePointer<Pointee>, ofLength length: Int) -> Bool {
+    func isEqual(to buffer: UnsafePointer<Pointee>, ofLength length: Int) -> Bool {
         for i in 0..<length where self[i] != buffer[i] {
             return false
         }
@@ -93,7 +93,7 @@ public extension UnsafeMutablePointer where Pointee: FixedWidthInteger {
         return true
     }
 
-    public func hexString(ofLength len: Int, withAdding prefix: String? = nil) -> String {
+    func hexString(ofLength len: Int, withAdding prefix: String? = nil) -> String {
         let count = MemoryLayout<Pointee>.size
         return self.withMemoryRebound(to: UInt8.self, capacity: count) { (bytes) -> String in
             var str: String = prefix ?? ""
@@ -106,7 +106,7 @@ public extension UnsafeMutablePointer where Pointee: FixedWidthInteger {
 }
 
 public extension UnsafePointer where Pointee: FixedWidthInteger {
-    public func isEqual(to buffer: UnsafePointer<Pointee>, ofLength length: Int) -> Bool {
+    func isEqual(to buffer: UnsafePointer<Pointee>, ofLength length: Int) -> Bool {
         for i in 0..<length where self[i] != buffer[i] {
             return false
         }
@@ -114,7 +114,7 @@ public extension UnsafePointer where Pointee: FixedWidthInteger {
         return true
     }
 
-    public func isEqual(to buffer: UnsafeMutablePointer<Pointee>, ofLength length: Int) -> Bool {
+    func isEqual(to buffer: UnsafeMutablePointer<Pointee>, ofLength length: Int) -> Bool {
         for i in 0..<length where self[i] != buffer[i] {
             return false
         }
@@ -122,7 +122,7 @@ public extension UnsafePointer where Pointee: FixedWidthInteger {
         return true
     }
 
-    public func hexString(ofLength len: Int, withAdding prefix: String? = nil) -> String {
+    func hexString(ofLength len: Int, withAdding prefix: String? = nil) -> String {
         let count = MemoryLayout<Pointee>.size
         return self.withMemoryRebound(to: UInt8.self, capacity: count) { (bytes) -> String in
             var str: String = prefix ?? ""

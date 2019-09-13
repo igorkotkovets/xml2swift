@@ -9,9 +9,9 @@ import Foundation
 import libxml2
 
 class XMLNamespaceNode: XMLNode {
-    let nsParentPtr: xmlNodePtr
+    let nsParentPtr: xmlNodePtr?
 
-    init(withNamespace primitive: xmlNsPtr, nsParent: xmlNodePtr, owner: XMLNode) {
+    init(withNamespace primitive: xmlNsPtr, nsParent: xmlNodePtr?, owner: XMLNode) {
         self.nsParentPtr = nsParent
         super.init(withPrimitive: primitive, owner: nil)
     }
@@ -20,13 +20,7 @@ class XMLNamespaceNode: XMLNode {
         return XMLNamespaceNode(withNamespace: primitive, nsParent: nsParent, owner: owner)
     }
 
-    override var stringValue: String? {
-        set {
-            // TODO: IMPLEMENT
-        }
-        get {
-            let node = UnsafeMutablePointer<xmlNs>(OpaquePointer(xmlPtr))
-            return String(cString: node.pointee.href)
-        }
+    override var children: [XMLNode]? {
+        return nil;
     }
 }
