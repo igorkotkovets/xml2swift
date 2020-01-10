@@ -33,13 +33,13 @@ import Foundation
 extension XMLDocument {
 
     /*!
-     @typedef XMLDocument.ContentKind
-     @abstract Define what type of document this is.
-     @constant XMLDocument.ContentKind.xml The default document type
-     @constant XMLDocument.ContentKind.xhtml Set if XMLNode.Options.documentTidyHTML is set and HTML is detected
-     @constant XMLDocument.ContentKind.html Outputs empty tags without a close tag, eg <br>
-     @constant XMLDocument.ContentKind.text Output the string value of the document
-     */
+        @typedef XMLDocument.ContentKind
+        @abstract Define what type of document this is.
+        @constant XMLDocument.ContentKind.xml The default document type
+        @constant XMLDocument.ContentKind.xhtml Set if XMLNode.Options.documentTidyHTML is set and HTML is detected
+        @constant XMLDocument.ContentKind.html Outputs empty tags without a close tag, eg <br>
+        @constant XMLDocument.ContentKind.text Output the string value of the document
+    */
     public enum ContentKind : UInt {
 
         case xml
@@ -50,13 +50,13 @@ extension XMLDocument {
 }
 
 /*!
- @class XMLDocument
- @abstract An XML Document
- @discussion Note: if the application of a method would result in more than one element in the children array, an exception is thrown. Trying to add a document, namespace, attribute, or node with a parent also throws an exception. To add a node with a parent first detach or create a copy of it.
- */
+    @class XMLDocument
+    @abstract An XML Document
+    @discussion Note: if the application of a method would result in more than one element in the children array, an exception is thrown. Trying to add a document, namespace, attribute, or node with a parent also throws an exception. To add a node with a parent first detach or create a copy of it.
+*/
 open class XMLDocument : XMLNode {
-    private var _xmlDoc: _XMLDocPtr {
-        return _XMLDocPtr(_xmlNode)
+    private var _xmlDoc: _CFXMLDocPtr {
+        return _CFXMLDocPtr(_xmlNode)
     }
 
     public init?(withRead ioread: @escaping xmlInputReadCallback,
@@ -74,11 +74,11 @@ open class XMLDocument : XMLNode {
     }
 
     /*!
-     @method initWithXMLString:options:error:
-     @abstract Returns a document created from either XML or HTML, if the HTMLTidy option is set. Parse errors are returned in <tt>error</tt>.
-     */
+        @method initWithXMLString:options:error:
+        @abstract Returns a document created from either XML or HTML, if the HTMLTidy option is set. Parse errors are returned in <tt>error</tt>.
+    */
     public convenience init(xmlString string: String, options mask: XMLNode.Options = []) throws {
-        _SetupXMLParser()
+        setupXMLParsing()
         guard let data = string.data(using: .utf8) else {
             // TODO: Throw an error
             fatalError("String: '\(string)' could not be converted to NSData using UTF-8 encoding")
@@ -88,24 +88,24 @@ open class XMLDocument : XMLNode {
     }
 
     /*!
-     @method initWithContentsOfURL:options:error:
-     @abstract Returns a document created from the contents of an XML or HTML URL. Connection problems such as 404, parse errors are returned in <tt>error</tt>.
-     */
+        @method initWithContentsOfURL:options:error:
+        @abstract Returns a document created from the contents of an XML or HTML URL. Connection problems such as 404, parse errors are returned in <tt>error</tt>.
+    */
     public convenience init(contentsOf url: URL, options mask: XMLNode.Options = []) throws {
-        _SetupXMLParser()
+        setupXMLParsing()
         let data = try Data(contentsOf: url, options: .mappedIfSafe)
 
         try self.init(data: data, options: mask)
     }
 
     /*!
-     @method initWithData:options:error:
-     @abstract Returns a document created from data. Parse errors are returned in <tt>error</tt>.
-     */
+        @method initWithData:options:error:
+        @abstract Returns a document created from data. Parse errors are returned in <tt>error</tt>.
+    */
     public init(data: Data, options mask: XMLNode.Options = []) throws {
-        _SetupXMLParser()
-        let docPtr: _XMLDocPtr = _XMLDocPtrFromDataWithOptions(unsafeBitCast(data as NSData, to: CFData.self), UInt32(mask.rawValue))
-        super.init(ptr: _XMLNodePtr(docPtr))
+        setupXMLParsing()
+        let docPtr: _CFXMLDocPtr = _CFXMLDocPtrFromDataWithOptions(unsafeBitCast(data as NSData, to: CFData.self), UInt32(mask.rawValue))
+        super.init(ptr: _CFXMLNodePtr(docPtr))
 
         if mask.contains(.documentValidate) {
             try validate()
@@ -113,79 +113,79 @@ open class XMLDocument : XMLNode {
     }
 
     /*!
-     @method initWithRootElement:
-     @abstract Returns a document with a single child, the root element.
-     */
+        @method initWithRootElement:
+        @abstract Returns a document with a single child, the root element.
+    */
     public init(rootElement element: XMLElement?) {
-        _SetupXMLParser()
+        setupXMLParsing()
         precondition(element?.parent == nil)
 
         super.init(kind: .document, options: [])
         if let element = element {
-            _XMLDocSetRootElement(_xmlDoc, element._xmlNode)
+            _CFXMLDocSetRootElement(_xmlDoc, element._xmlNode)
             _childNodes.insert(element)
         }
     }
 
     /*!
-     @method characterEncoding
-     @abstract Sets the character encoding to an IANA type.
-     */
+        @method characterEncoding
+        @abstract Sets the character encoding to an IANA type.
+    */
     open var characterEncoding: String? {
         get {
-            let returned = _XMLDocCopyCharacterEncoding(_xmlDoc)
+            let returned = _CFXMLDocCopyCharacterEncoding(_xmlDoc)
             return returned == nil ? nil : unsafeBitCast(returned!, to: NSString.self) as String
         }
         set {
             if let value = newValue {
-                _XMLDocSetCharacterEncoding(_xmlDoc, value)
+                _CFXMLDocSetCharacterEncoding(_xmlDoc, value)
             } else {
-                _XMLDocSetCharacterEncoding(_xmlDoc, nil)
+                _CFXMLDocSetCharacterEncoding(_xmlDoc, nil)
             }
         }
     }
 
     /*!
-     @method version
-     @abstract Sets the XML version. Should be 1.0 or 1.1.
-     */
+        @method version
+        @abstract Sets the XML version. Should be 1.0 or 1.1.
+    */
     open var version: String? {
         get {
-            let returned = _XMLDocCopyVersion(_xmlDoc)
+            let returned = _CFXMLDocCopyVersion(_xmlDoc)
             return returned == nil ? nil : unsafeBitCast(returned!, to: NSString.self) as String
         }
         set {
             if let value = newValue {
                 precondition(value == "1.0" || value == "1.1")
-                _XMLDocSetVersion(_xmlDoc, value)
+                _CFXMLDocSetVersion(_xmlDoc, value)
             } else {
-                _XMLDocSetVersion(_xmlDoc, nil)
+                _CFXMLDocSetVersion(_xmlDoc, nil)
             }
         }
     }
 
     /*!
-     @method standalone
-     @abstract Set whether this document depends on an external DTD. If this option is set the standalone declaration will appear on output.
-     */
+        @method standalone
+        @abstract Set whether this document depends on an external DTD. If this option is set the standalone declaration will appear on output.
+    */
     open var isStandalone: Bool {
         get {
-            return _XMLDocStandalone(_xmlDoc)
+            return _CFXMLDocStandalone(_xmlDoc)
         }
         set {
-            _XMLDocSetStandalone(_xmlDoc, newValue)
+            _CFXMLDocSetStandalone(_xmlDoc, newValue)
         }
     }//primitive
 
     /*!
-     @method documentContentKind
-     @abstract The kind of document.
-     */
+        @method documentContentKind
+        @abstract The kind of document.
+    */
     open var documentContentKind: XMLDocument.ContentKind  {
         get {
-            let properties = _XMLDocProperties(_xmlDoc)
+            let properties = _CFXMLDocProperties(_xmlDoc)
 
-            if properties & Int32(_kXMLDocTypeHTML) != 0 {
+            if properties & Int32(_kCFXMLDocTypeHTML) != 0 {
                 return .html
             }
 
@@ -193,41 +193,41 @@ open class XMLDocument : XMLNode {
         }
 
         set {
-            var properties = _XMLDocProperties(_xmlDoc)
+            var properties = _CFXMLDocProperties(_xmlDoc)
             switch newValue {
             case .html:
-                properties |= Int32(_kXMLDocTypeHTML)
+                properties |= Int32(_kCFXMLDocTypeHTML)
 
             default:
-                properties &= ~Int32(_kXMLDocTypeHTML)
+                properties &= ~Int32(_kCFXMLDocTypeHTML)
             }
 
-            _XMLDocSetProperties(_xmlDoc, properties)
+            _CFXMLDocSetProperties(_xmlDoc, properties)
         }
     }//primitive
 
     /*!
-     @method MIMEType
-     @abstract Set the MIME type, eg text/xml.
-     */
+        @method MIMEType
+        @abstract Set the MIME type, eg text/xml.
+    */
     open var mimeType: String?
 
     /*!
-     @method DTD
-     @abstract Set the associated DTD. This DTD will be output with the document.
-     */
+        @method DTD
+        @abstract Set the associated DTD. This DTD will be output with the document.
+    */
     /*@NSCopying*/ open var dtd: XMLDTD? {
         get {
-            return XMLDTD._objectNodeForNode(_XMLDocDTD(_xmlDoc)!)
+            return XMLDTD._objectNodeForNode(_CFXMLDocDTD(_xmlDoc)!)
         }
         set {
-            if let currDTD = _XMLDocDTD(_xmlDoc) {
-                if _XMLNodeGetPrivateData(currDTD) != nil {
+            if let currDTD = _CFXMLDocDTD(_xmlDoc) {
+                if _CFXMLNodeGetPrivateData(currDTD) != nil {
                     let DTD = XMLDTD._objectNodeForNode(currDTD)
-                    _XMLUnlinkNode(currDTD)
+                    _CFXMLUnlinkNode(currDTD)
                     _childNodes.remove(DTD)
                 } else {
-                    _XMLFreeDTD(currDTD)
+                    _CFXMLFreeDTD(currDTD)
                 }
             }
 
@@ -235,18 +235,18 @@ open class XMLDocument : XMLNode {
                 guard let dtd = value.copy() as? XMLDTD else {
                     fatalError("Failed to copy DTD")
                 }
-                _XMLDocSetDTD(_xmlDoc, dtd._xmlDTD)
+                _CFXMLDocSetDTD(_xmlDoc, dtd._xmlDTD)
                 _childNodes.insert(dtd)
             } else {
-                _XMLDocSetDTD(_xmlDoc, nil)
+                _CFXMLDocSetDTD(_xmlDoc, nil)
             }
         }
     }//primitive
 
     /*!
-     @method setRootElement:
-     @abstract Set the root element. Removes all other children including comments and processing-instructions.
-     */
+        @method setRootElement:
+        @abstract Set the root element. Removes all other children including comments and processing-instructions.
+    */
     open func setRootElement(_ root: XMLElement) {
         precondition(root.parent == nil)
 
@@ -254,16 +254,16 @@ open class XMLDocument : XMLNode {
             child.detach()
         }
 
-        _XMLDocSetRootElement(_xmlDoc, root._xmlNode)
+        _CFXMLDocSetRootElement(_xmlDoc, root._xmlNode)
         _childNodes.insert(root)
     }
 
     /*!
-     @method rootElement
-     @abstract The root element.
-     */
+        @method rootElement
+        @abstract The root element.
+    */
     open func rootElement() -> XMLElement? {
-        guard let rootPtr = _XMLDocRootElement(_xmlDoc) else {
+        guard let rootPtr = _CFXMLDocRootElement(_xmlDoc) else {
             return nil
         }
 
@@ -271,67 +271,67 @@ open class XMLDocument : XMLNode {
     }
 
     open override var childCount: Int {
-        return _XMLNodeGetElementChildCount(_xmlNode)
+        return _CFXMLNodeGetElementChildCount(_xmlNode)
     }
 
     /*!
-     @method insertChild:atIndex:
-     @abstract Inserts a child at a particular index.
-     */
+        @method insertChild:atIndex:
+        @abstract Inserts a child at a particular index.
+    */
     open func insertChild(_ child: XMLNode, at index: Int) {
         _insertChild(child, atIndex: index)
     }
 
     /*!
-     @method insertChildren:atIndex:
-     @abstract Insert several children at a particular index.
-     */
+        @method insertChildren:atIndex:
+        @abstract Insert several children at a particular index.
+    */
     open func insertChildren(_ children: [XMLNode], at index: Int) {
         _insertChildren(children, atIndex: index)
     }
 
     /*!
-     @method removeChildAtIndex:atIndex:
-     @abstract Removes a child at a particular index.
-     */
+        @method removeChildAtIndex:atIndex:
+        @abstract Removes a child at a particular index.
+    */
     open func removeChild(at index: Int) {
         _removeChildAtIndex(index)
     }
 
     /*!
-     @method setChildren:
-     @abstract Removes all existing children and replaces them with the new children. Set children to nil to simply remove all children.
-     */
+        @method setChildren:
+        @abstract Removes all existing children and replaces them with the new children. Set children to nil to simply remove all children.
+    */
     open func setChildren(_ children: [XMLNode]?) {
         _setChildren(children)
     }
 
     /*!
-     @method addChild:
-     @abstract Adds a child to the end of the existing children.
-     */
+        @method addChild:
+        @abstract Adds a child to the end of the existing children.
+    */
     open func addChild(_ child: XMLNode) {
         _addChild(child)
     }
 
     /*!
-     @method replaceChildAtIndex:withNode:
-     @abstract Replaces a child at a particular index with another child.
-     */
+        @method replaceChildAtIndex:withNode:
+        @abstract Replaces a child at a particular index with another child.
+    */
     open func replaceChild(at index: Int, with node: XMLNode) {
         _replaceChildAtIndex(index, withNode: node)
     }
 
     /*!
-     @method XMLData
-     @abstract Invokes XMLDataWithOptions with XMLNode.Options.none.
-     */
+        @method XMLData
+        @abstract Invokes XMLDataWithOptions with XMLNode.Options.none.
+    */
     /*@NSCopying*/ open var xmlData: Data { return xmlData() }
 
     /*!
-     @method XMLDataWithOptions:
-     @abstract The representation of this node as it would appear in an XML document, encoded based on characterEncoding.
-     */
+        @method XMLDataWithOptions:
+        @abstract The representation of this node as it would appear in an XML document, encoded based on characterEncoding.
+    */
     open func xmlData(options: XMLNode.Options = []) -> Data {
         let string = xmlString(options: options)
         // TODO: support encodings other than UTF-8
@@ -340,35 +340,35 @@ open class XMLDocument : XMLNode {
     }
 
     /*!
-     @method objectByApplyingXSLT:arguments:error:
-     @abstract Applies XSLT with arguments (NSString key/value pairs) to this document, returning a new document.
-     */
-    @available(*, unavailable, message: "XSLT application is not currently supported")
+        @method objectByApplyingXSLT:arguments:error:
+        @abstract Applies XSLT with arguments (NSString key/value pairs) to this document, returning a new document.
+    */
+    @available(*, unavailable, message: "XSLT application is not currently supported in swift-corelibs-foundation")
     open func object(byApplyingXSLT xslt: Data, arguments: [String : String]?) throws -> Any {
-        fatalError("\(#function) is not yet implemented", file: #file, line: #line)
+        NSUnimplemented()
     }
 
     /*!
-     @method objectByApplyingXSLTString:arguments:error:
-     @abstract Applies XSLT as expressed by a string with arguments (NSString key/value pairs) to this document, returning a new document.
-     */
-    @available(*, unavailable, message: "XSLT application is not currently supported")
+        @method objectByApplyingXSLTString:arguments:error:
+        @abstract Applies XSLT as expressed by a string with arguments (NSString key/value pairs) to this document, returning a new document.
+    */
+    @available(*, unavailable, message: "XSLT application is not currently supported in swift-corelibs-foundation")
     open func object(byApplyingXSLTString xslt: String, arguments: [String : String]?) throws -> Any {
-        fatalError("\(#function) is not yet implemented", file: #file, line: #line)
+        NSUnimplemented()
     }
 
     /*!
-     @method objectByApplyingXSLTAtURL:arguments:error:
-     @abstract Applies the XSLT at a URL with arguments (NSString key/value pairs) to this document, returning a new document. Error may contain a connection error from the URL.
-     */
-    @available(*, unavailable, message: "XSLT application is not currently supported")
+        @method objectByApplyingXSLTAtURL:arguments:error:
+        @abstract Applies the XSLT at a URL with arguments (NSString key/value pairs) to this document, returning a new document. Error may contain a connection error from the URL.
+    */
+    @available(*, unavailable, message: "XSLT application is not currently supported in swift-corelibs-foundation")
     open func objectByApplyingXSLT(at xsltURL: URL, arguments argument: [String : String]?) throws -> Any {
-        fatalError("\(#function) is not yet implemented", file: #file, line: #line)
+        NSUnimplemented()
     }
 
     open func validate() throws {
         var unmanagedError: Unmanaged<CFError>? = nil
-        let result = _XMLDocValidate(_xmlDoc, &unmanagedError)
+        let result = _CFXMLDocValidate(_xmlDoc, &unmanagedError)
         if !result,
             let unmanagedError = unmanagedError {
             let error = unmanagedError.takeRetainedValue()
@@ -376,17 +376,17 @@ open class XMLDocument : XMLNode {
         }
     }
 
-    internal override class func _objectNodeForNode(_ node: _XMLNodePtr) -> XMLDocument {
-        precondition(_XMLNodeGetType(node) == _kXMLTypeDocument)
+    internal override class func _objectNodeForNode(_ node: _CFXMLNodePtr) -> XMLDocument {
+        precondition(_CFXMLNodeGetType(node) == _kCFXMLTypeDocument)
 
-        if let privateData = _XMLNodeGetPrivateData(node) {
+        if let privateData = _CFXMLNodeGetPrivateData(node) {
             return unsafeBitCast(privateData, to: XMLDocument.self)
         }
 
         return XMLDocument(ptr: node)
     }
 
-    internal override init(ptr: _XMLNodePtr) {
+    internal override init(ptr: _CFXMLNodePtr) {
         super.init(ptr: ptr)
     }
 }

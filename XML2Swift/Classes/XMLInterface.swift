@@ -7,7 +7,7 @@
 
 import Foundation
 
-var _SetupXMLParser: () -> Void = {
+var setupXMLParsing: () -> Void = {
     xmlInitParser();
     return {}
 }()

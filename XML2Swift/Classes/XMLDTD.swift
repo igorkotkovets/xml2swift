@@ -9,13 +9,13 @@ import CoreFoundation
 
 
 /*!
- @class XMLDTD
- @abstract Defines the order, repetition, and allowable values for a document
- */
+    @class XMLDTD
+    @abstract Defines the order, repetition, and allowable values for a document
+*/
 open class XMLDTD : XMLNode {
 
-    internal var _xmlDTD: _XMLDTDPtr {
-        return _XMLDTDPtr(_xmlNode)
+    internal var _xmlDTD: _CFXMLDTDPtr {
+        return _CFXMLDTDPtr(_xmlNode)
     }
 
     public init() {
@@ -23,10 +23,10 @@ open class XMLDTD : XMLNode {
     }
 
     public convenience init(contentsOf url: URL, options mask: XMLNode.Options = []) throws {
-        _SetupXMLParser()
+        setupXMLParsing()
         let urlString = url.absoluteString
 
-        guard let node = _XMLParseDTD(urlString) else {
+        guard let node = _CFXMLParseDTD(urlString) else {
             //TODO: throw error
             fatalError("parsing dtd string failed")
         }
@@ -34,10 +34,10 @@ open class XMLDTD : XMLNode {
     }
 
     public convenience init(data: Data, options mask: XMLNode.Options = []) throws {
-        _SetupXMLParser()
+        setupXMLParsing()
         var unmanagedError: Unmanaged<CFError>? = nil
 
-        guard let node = _XMLParseDTDFromData(unsafeBitCast(data as NSData, to: CFData.self), &unmanagedError) else {
+        guard let node = _CFXMLParseDTDFromData(unsafeBitCast(data as NSData, to: CFData.self), &unmanagedError) else {
             if let error = unmanagedError?.takeRetainedValue() {
                 throw error
             }
@@ -45,162 +45,162 @@ open class XMLDTD : XMLNode {
             fatalError("parsing dtd from data failed")
         }
 
-        // _XMLParseDTDFromData assigns "none" to DTD's name when there's no name for DTD.
-        if _XMLNodeNameEqual(node, "none") {
-            _XMLNodeForceSetName(node, nil)
+        // _CFXMLParseDTDFromData assigns "none" to DTD's name when there's no name for DTD.
+        if _CFXMLNodeNameEqual(node, "none") {
+            _CFXMLNodeForceSetName(node, nil)
         }
 
         self.init(ptr: node)
     }
 
     /*!
-     @method openID
-     @abstract Sets the open id. This identifier should be in the default catalog in /etc/xml/catalog or in a path specified by the environment variable XML_CATALOG_FILES. When the public id is set the system id must also be set.
-     */
+        @method openID
+        @abstract Sets the open id. This identifier should be in the default catalog in /etc/xml/catalog or in a path specified by the environment variable XML_CATALOG_FILES. When the public id is set the system id must also be set.
+    */
     open var publicID: String? {
         get {
-            let returned = _XMLDTDCopyExternalID(_xmlDTD)
+            let returned = _CFXMLDTDCopyExternalID(_xmlDTD)
             return returned == nil ? nil : unsafeBitCast(returned!, to: NSString.self) as String
         }
 
         set {
             if let value = newValue {
-                _XMLDTDSetExternalID(_xmlDTD, value)
+                _CFXMLDTDSetExternalID(_xmlDTD, value)
             } else {
-                _XMLDTDSetExternalID(_xmlDTD, nil)
+                _CFXMLDTDSetExternalID(_xmlDTD, nil)
             }
         }
     }
 
     /*!
-     @method systemID
-     @abstract Sets the system id. This should be a URL that points to a valid DTD.
-     */
+        @method systemID
+        @abstract Sets the system id. This should be a URL that points to a valid DTD.
+    */
     open var systemID: String? {
         get {
-            let returned = _XMLDTDCopySystemID(_xmlDTD)
+            let returned = _CFXMLDTDCopySystemID(_xmlDTD)
             return returned == nil ? nil : unsafeBitCast(returned!, to: NSString.self) as String
         }
 
         set {
             if let value = newValue {
-                _XMLDTDSetSystemID(_xmlDTD, value)
+                _CFXMLDTDSetSystemID(_xmlDTD, value)
             } else {
-                _XMLDTDSetSystemID(_xmlDTD, nil)
+                _CFXMLDTDSetSystemID(_xmlDTD, nil)
             }
         }
     }
 
     open override var childCount: Int {
-        return _XMLNodeGetElementChildCount(_xmlNode)
+        return _CFXMLNodeGetElementChildCount(_xmlNode)
     }
 
     /*!
-     @method insertChild:atIndex:
-     @abstract Inserts a child at a particular index.
-     */
+        @method insertChild:atIndex:
+        @abstract Inserts a child at a particular index.
+    */
     open func insertChild(_ child: XMLNode, at index: Int) {
         _insertChild(child, atIndex: index)
     } //primitive
 
     /*!
-     @method insertChildren:atIndex:
-     @abstract Insert several children at a particular index.
-     */
+        @method insertChildren:atIndex:
+        @abstract Insert several children at a particular index.
+    */
     open func insertChildren(_ children: [XMLNode], at index: Int) {
         _insertChildren(children, atIndex: index)
     }
 
     /*!
-     @method removeChildAtIndex:
-     @abstract Removes a child at a particular index.
-     */
+        @method removeChildAtIndex:
+        @abstract Removes a child at a particular index.
+    */
     open func removeChild(at index: Int) {
         _removeChildAtIndex(index)
     } //primitive
 
     /*!
-     @method setChildren:
-     @abstract Removes all existing children and replaces them with the new children. Set children to nil to simply remove all children.
-     */
+        @method setChildren:
+        @abstract Removes all existing children and replaces them with the new children. Set children to nil to simply remove all children.
+    */
     open func setChildren(_ children: [XMLNode]?) {
         _setChildren(children)
     } //primitive
 
     /*!
-     @method addChild:
-     @abstract Adds a child to the end of the existing children.
-     */
+        @method addChild:
+        @abstract Adds a child to the end of the existing children.
+    */
     open func addChild(_ child: XMLNode) {
         _addChild(child)
     }
 
     /*!
-     @method replaceChildAtIndex:withNode:
-     @abstract Replaces a child at a particular index with another child.
-     */
+        @method replaceChildAtIndex:withNode:
+        @abstract Replaces a child at a particular index with another child.
+    */
     open func replaceChild(at index: Int, with node: XMLNode) {
         _replaceChildAtIndex(index, withNode: node)
     }
 
     /*!
-     @method entityDeclarationForName:
-     @abstract Returns the entity declaration matching this name.
-     */
+        @method entityDeclarationForName:
+        @abstract Returns the entity declaration matching this name.
+    */
     open func entityDeclaration(forName name: String) -> XMLDTDNode? {
-        guard let node = _XMLDTDGetEntityDesc(_xmlDTD, name) else { return nil }
+        guard let node = _CFXMLDTDGetEntityDesc(_xmlDTD, name) else { return nil }
         return XMLDTDNode._objectNodeForNode(node)
     } //primitive
 
     /*!
-     @method notationDeclarationForName:
-     @abstract Returns the notation declaration matching this name.
-     */
+        @method notationDeclarationForName:
+        @abstract Returns the notation declaration matching this name.
+    */
     open func notationDeclaration(forName name: String) -> XMLDTDNode? {
-        guard let node = _XMLDTDGetNotationDesc(_xmlDTD, name) else { return nil }
+        guard let node = _CFXMLDTDGetNotationDesc(_xmlDTD, name) else { return nil }
         return XMLDTDNode._objectNodeForNode(node)
     } //primitive
 
     /*!
-     @method elementDeclarationForName:
-     @abstract Returns the element declaration matching this name.
-     */
+        @method elementDeclarationForName:
+        @abstract Returns the element declaration matching this name.
+    */
     open func elementDeclaration(forName name: String) -> XMLDTDNode? {
-        guard let node = _XMLDTDGetElementDesc(_xmlDTD, name) else { return nil }
+        guard let node = _CFXMLDTDGetElementDesc(_xmlDTD, name) else { return nil }
         return XMLDTDNode._objectNodeForNode(node)
     } //primitive
 
     /*!
-     @method attributeDeclarationForName:
-     @abstract Returns the attribute declaration matching this name.
-     */
+        @method attributeDeclarationForName:
+        @abstract Returns the attribute declaration matching this name.
+    */
     open func attributeDeclaration(forName name: String, elementName: String) -> XMLDTDNode? {
-        guard let node = _XMLDTDGetAttributeDesc(_xmlDTD, elementName, name) else { return nil }
+        guard let node = _CFXMLDTDGetAttributeDesc(_xmlDTD, elementName, name) else { return nil }
         return XMLDTDNode._objectNodeForNode(node)
     } //primitive
 
     /*!
-     @method predefinedEntityDeclarationForName:
-     @abstract Returns the predefined entity declaration matching this name.
-     @discussion The five predefined entities are
-     <ul><li>&amp;lt; - &lt;</li><li>&amp;gt; - &gt;</li><li>&amp;amp; - &amp;</li><li>&amp;quot; - &quot;</li><li>&amp;apos; - &amp;</li></ul>
-     */
+        @method predefinedEntityDeclarationForName:
+        @abstract Returns the predefined entity declaration matching this name.
+        @discussion The five predefined entities are
+        <ul><li>&amp;lt; - &lt;</li><li>&amp;gt; - &gt;</li><li>&amp;amp; - &amp;</li><li>&amp;quot; - &quot;</li><li>&amp;apos; - &amp;</li></ul>
+    */
     open class func predefinedEntityDeclaration(forName name: String) -> XMLDTDNode? {
-        guard let node = _XMLDTDGetPredefinedEntity(name) else { return nil }
+        guard let node = _CFXMLDTDGetPredefinedEntity(name) else { return nil }
         return XMLDTDNode._objectNodeForNode(node)
     }
 
-    internal override class func _objectNodeForNode(_ node: _XMLNodePtr) -> XMLDTD {
-        precondition(_XMLNodeGetType(node) == _kXMLTypeDTD)
+    internal override class func _objectNodeForNode(_ node: _CFXMLNodePtr) -> XMLDTD {
+        precondition(_CFXMLNodeGetType(node) == _kCFXMLTypeDTD)
 
-        if let privateData = _XMLNodeGetPrivateData(node) {
+        if let privateData = _CFXMLNodeGetPrivateData(node) {
             return unsafeBitCast(privateData, to: XMLDTD.self)
         }
 
         return XMLDTD(ptr: node)
     }
 
-    internal override init(ptr: _XMLNodePtr) {
+    internal override init(ptr: _CFXMLNodePtr) {
         super.init(ptr: ptr)
     }
 }
