@@ -416,3 +416,9 @@ extension XMLElement {
     @available(*, unavailable, renamed:"setAttributesWith")
     public func setAttributesAs(_ attributes: [NSObject : AnyObject]) { NSUnsupported() }
 }
+
+extension XMLElement {
+    public func element(forName name: String) -> XMLElement? {
+        return elements(forName: name).first
+    }
+}

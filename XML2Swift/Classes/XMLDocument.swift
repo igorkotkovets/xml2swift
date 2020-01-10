@@ -66,7 +66,7 @@ open class XMLDocument : XMLNode {
         guard let doc = xmlReadIO(ioread, ioclose, context, nil, nil, Int32(mask)) else {
             return nil
         }
-        super.init(withPrimitive: doc)
+        super.init(ptr: _CFXMLNodePtr(doc))
     }
 
     public convenience init() {
